@@ -31,11 +31,11 @@ function sendOrderEmail($customerEmail, $customerName, $cartItems, $grandTotal)
     $mail = new PHPMailer(true);
 
     try {
+        // DONT MODIFY !!!!!!!!!!!!
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
 
-        // DONT MODIFY !!!!!!!!!!!!
         $mail->Username = 'tyteamwork2324@gmail.com';
         $mail->Password = 'hfiowkemjflayhsc';
         $mail->setFrom('tyteamwork2324@gmail.com', 'HKMU Shopping App');
