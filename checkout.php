@@ -35,7 +35,7 @@ function sendOrderEmail($customerEmail, $customerName, $cartItems, $grandTotal)
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
 
-        // CHANGE THESE 3 LINES
+        // DONT MODIFY !!!!!!!!!!!!
         $mail->Username = 'tyteamwork2324@gmail.com';
         $mail->Password = 'hfiowkemjflayhsc';
         $mail->setFrom('tyteamwork2324@gmail.com', 'HKMU Shopping App');
@@ -44,11 +44,8 @@ function sendOrderEmail($customerEmail, $customerName, $cartItems, $grandTotal)
         $mail->Port = 465;
         $mail->Timeout = 30;
 
-        // For testing only. Remove after it works.
-        // $mail->SMTPDebug = 2;
-        // $mail->Debugoutput = 'html';
-
         $mail->addAddress($customerEmail);
+         // DONT MODIFY !!!!!!!!!!!!
 
         $itemRowsHtml = "";
         $itemRowsText = "";
