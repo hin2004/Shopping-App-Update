@@ -1,100 +1,89 @@
 <?php
-
 session_start();
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
-error_reporting(0);
+$conn = mysqli_connect("localhost", "root", "", "php_shopping app");
+/* 如果你之後改返自己 database，例如 php_shopping_app，就改上面呢行 */
 
-$conn = mysqli_connect("localhost","root","root","php_shopping app", 8889);
+if (!$conn) {
+    die("Database connection failed: " . mysqli_connect_error());
+}
 
-    if(isset($_POST['login']))
-    {
-        $u_id = $_POST['hkmuid'];
+$message = "";
 
-        $pass = $_POST['password'];
+if (isset($_POST['login'])) {
+    $email = trim($_POST['email']);
+    $password = trim($_POST['password']);
 
-        $sql = "SELECT * from users Where hkmuid = '".$u_id."' AND password = '".$pass."' ";
+    $sql = "SELECT * FROM users WHERE email='$email' AND password='$password'";
+    $result = mysqli_query($conn, $sql);
 
-        $result = mysqli_query($conn,$sql);
+    if ($result && mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
 
-        $row = mysqli_fetch_array($result);
+        $_SESSION['user_id'] = $row['hkmuid'];
+        $_SESSION['name'] = $row['name'];
+        $_SESSION['usertype'] = $row['usertype'];
 
-        if($row['usertype']=="user")
-        {
-            $_SESSION['user_id']=$u_id;
-
-            $_SESSION['usertype']="user";
-
-            header("location:userpage.php");
+        if ($row['usertype'] == "admin") {
+            header("Location: ../admin/adminpage.php");
+            exit();
+        } else {
+            header("Location: userpage.php");
+            exit();
         }
-
-        else if ($row['usertype']=="admin")
-        {
-            $_SESSION['user_id']=$u_id;
-
-            $_SESSION['usertype']="admin";
-
-            header("location:../admin/adminpage.php");
-        }
-
-        else
-        {
-            $_SESSION['message']="ID or Password is wrong";
-
-
-        }
-
-            
+    } else {
+        $message = "Invalid email or password.";
     }
-
-
+}
 ?>
-
-
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset='utf-8'>
-    <title>Page Title</title>
-    <meta name='viewport' content='width=device-width, initial-scale=1'>
-
-    <link rel='stylesheet' type='text/css' href='../style.css'>
+    <meta charset="utf-8">
+    <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="../style.css">
 </head>
 <body>
 
-    <div class="my_form">
+<main class="login_page">
+    <div class="login_box">
+        <h1 class="login_title">Welcome Back, Please Sign In</h1>
+        <p class="login_subtitle">Welcome to HKMU Shopping App</p>
 
-        <h2>
-
-            <?php
-
-            echo $_SESSION['message'];
-
-            ?>
-
-        </h2>
-
-        <h2>Login Form</h2>
+        <?php if ($message != "") { ?>
+            <div class="login_error"><?php echo $message; ?></div>
+        <?php } ?>
 
         <form action="" method="POST">
-
-
-            <div class="input_deg">
-                <label>ID</label>
-                <input type="number" name="hkmuid" required>
+            <div class="login_group">
+                <label>Email</label>
+                <input type="email" name="email" placeholder="Email" required>
             </div>
 
-            <div class="input_deg">
+            <div class="login_group">
                 <label>Password</label>
-                <input type="password" name="password" required>
+                <input type="password" name="password" placeholder="Password" required>
             </div>
 
-            <div class="input_deg">
-
-                <input type="submit" name="login" value="Login">
+            <div class="login_remember">
+                <input type="checkbox" id="remember">
+                <label for="remember">Remember me</label>
             </div>
+
+            <button type="submit" name="login" class="login_btn_main">Login</button>
+
+            <a href="register.php" class="login_btn_second">Create New Account</a>
         </form>
 
+        <div class="login_links">
+            <a href="forgetpw.php">Change password?</a>
+            
+        </div>
     </div>
-    
+</main>
+
 </body>
 </html>

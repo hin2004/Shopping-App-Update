@@ -1,38 +1,43 @@
 <?php
+session_start();
 
-    session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("location:login.php");
+    exit();
+}
 
-    if(!isset($_SESSION['user_id']))
-    {
-        
-        header("location:login.php");
-
-    }
-
-    else if ($_SESSION['usertype'] =="admin")
-    {
-        header("location:login.php");
-    }
-
-
+if ($_SESSION['usertype'] != "user") {
+    header("location:../admin/adminpage.php");
+    exit();
+}
 ?>
-
-
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset='utf-8'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>Page Title</title>
-    <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
-    <script src='main.js'></script>
+    <meta charset="utf-8">
+    <title>User Page</title>
+    <link rel="stylesheet" type="text/css" href="../style.css">
 </head>
 <body>
 
-    <h1>This is User Page</h1>
+<nav>
+    <label class="my_logo">HKMU Shopping App</label>
+    <ul>
+        <li><a href="../index.php">Home</a></li>
+        <li><a href="../cart.php">Cart</a></li>
+        <li><a href="../logout.php">Logout</a></li>
+    </ul>
+</nav>
 
-    <a href="../logout.php">Logout</a>
-    
+<div class="checkout_box">
+    <h2>Welcome User</h2>
+    <p style="text-align:center; margin-bottom:20px;">
+        You are logged in successfully.
+    </p>
+    <div style="text-align:center;">
+        <a class="normal_btn" href="../index.php">Go Shopping</a>
+    </div>
+</div>
+
 </body>
 </html>
